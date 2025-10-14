@@ -18,10 +18,6 @@ save_icon=tk.PhotoImage(file='icons2/save_as.png')
 exit_icon=tk.PhotoImage(file='icons2/exit.png')
 #adding command for file manu
 file=tk.Menu(main_menu,tearoff=False)
-file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
-file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O')
-file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S')
-file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q')
 
 # edit icons
 copy_icon=tk.PhotoImage(file='icons2/copy.png')
@@ -31,12 +27,6 @@ clear_all_icon=tk.PhotoImage(file='icons2/clear_all.png')
 find_icon=tk.PhotoImage(file='icons2/find.png')
 #ADDING COMMAND FOR EDIT MENU
 edit=tk.Menu(main_menu,tearoff=False)
-edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C')
-edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V')
-edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X')
-edit.add_command(label='Clear All',image=clear_all_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+X')
-edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F')
-
 
 # color theme icons
 light_default_icon=tk.PhotoImage(file='icons2/light_default.png')
@@ -47,20 +37,25 @@ monokai_icon=tk.PhotoImage(file='icons2/monokai.png')
 night_blue_icon=tk.PhotoImage(file='icons2/night_blue.png')
 #ADDING COMMAND FOR COLOR THEME MENU
 color_theme=tk.Menu(main_menu,tearoff=False)
-color_theme.add_radiobutton(label='Light Default',image=light_default_icon,compound=tk.LEFT)
-color_theme.add_radiobutton(label='Light Plus',image=light_plus_icon,compound=tk.LEFT)
-color_theme.add_radiobutton(label='Dark',image=dark_icon,compound=tk.LEFT)
-color_theme.add_radiobutton(label='Red',image=red_icon,compound=tk.LEFT)
-color_theme.add_radiobutton(label='Monokai',image=monokai_icon,compound=tk.LEFT)
-color_theme.add_radiobutton(label='Night Blue',image=night_blue_icon,compound=tk.LEFT)
+
+theme_choice=tk.StringVar()
+color_icons=(light_default_icon,light_plus_icon,dark_icon,red_icon,monokai_icon,night_blue_icon)
+color_dict={
+    'Light Default':('#000000','#ffffff'),
+    'Light Plus':('#474747','#e0e0e0'),
+    'Dark':('#c4c4c4','#2d2d2d'),
+    'Red':('#2d2d2d','#ffe8e8'),
+    'Monokai':('#d3b774','#474747'),
+    'Night Blue':('#ededed','#6b9dc2')
+}
+
 #view icons
 tool_bar_icon=tk.PhotoImage(file='icons2/tool_bar.png')
 status_bar_icon=tk.PhotoImage(file='icons2/status_bar.png')
 #ADDING COMMAND FOR VIEW MENU
 
 view=tk.Menu(main_menu,tearoff=False)
-view.add_checkbutton(label='Tool Bar',image=tool_bar_icon,compound=tk.LEFT)
-view.add_checkbutton(label='Status Bar',image=status_bar_icon,compound=tk.LEFT)
+
 
 #icon of the about
 about_icon=tk.PhotoImage(file='icons2/github.png')
@@ -81,6 +76,38 @@ main_menu.add_cascade(label='About',menu=about)
 
 ########### Toolbar menu section##########
 
+#font box 
+tool_bar=ttk.Label(main_application)
+tool_bar.pack(side=tk.TOP,fill=tk.X)
+fonts_tuples=tk.font.families()
+font_family=tk.StringVar()
+font_box=ttk.Combobox(tool_bar,width=20,textvariable=font_family,state='readonly')
+font_box['values']=fonts_tuples
+font_box.current(fonts_tuples.index('Arial'))
+font_box.grid(row=0,column=0,padx=5)
+
+#size box -toolbar 
+size_var=tk.IntVar()
+font_size=ttk.Combobox(tool_bar,width=14,textvariable=size_var,state='readonly')
+font_size['values']=tuple(range(8,81,2))
+font_size.current(3)
+font_size.grid(row=0,column=1,padx=5)
+
+# bold button
+bold_icon=tk.PhotoImage(file='icons2/bold.png')
+bold_btn=ttk.Button(tool_bar,image=bold_icon)
+bold_btn.grid(row=0,column=2,padx=5)
+# italic button
+italic_icon=tk.PhotoImage(file='icons2/italic.png')
+italic_btn=ttk.Button(tool_bar,image=italic_icon)
+italic_btn.grid(row=0,column=3,padx=5)
+# underline button
+underline_icon=tk.PhotoImage(file='icons2/underline.png')
+underline_btn=ttk.Button(tool_bar,image=underline_icon)
+underline_btn.grid(row=0,column=4,padx=5)
+
+
+
 # ##############Toolbar menu ending ###########
 
 
@@ -97,6 +124,30 @@ main_menu.add_cascade(label='About',menu=about)
 
 ########### Main menu Functionality##########
 
+# file commands
+file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
+file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O')
+file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S')
+file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q')
+
+# edit commands 
+edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C')
+edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V')
+edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X')
+edit.add_command(label='Clear All',image=clear_all_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+X')
+edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F')
+
+# view check buttons /commands
+view.add_checkbutton(label='Tool Bar',image=tool_bar_icon,compound=tk.LEFT)
+view.add_checkbutton(label='Status Bar',image=status_bar_icon,compound=tk.LEFT)
+
+# color theme radio buttons/commands
+count =0
+for i in color_dict:
+    color_theme.add_radiobutton(label=i,image=color_icons[count],variable=theme_choice,compound=tk.LEFT)
+    count+=1
+
+
 # ##############Main  menu Functionality ending ###########
 
 
@@ -104,4 +155,5 @@ main_menu.add_cascade(label='About',menu=about)
 
 
 main_application.configure(menu=main_menu)
+
 main_application.mainloop()
