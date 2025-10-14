@@ -38,7 +38,14 @@ edit.add_command(label='Clear All',image=clear_all_icon,compound=tk.LEFT,acceler
 edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F')
 
 
-
+# color theme icons
+light_default_icon=tk.PhotoImage(file='icons2/light_default.png')
+light_plus_icon=tk.PhotoImage(file='icons2/light_plus.png')
+dark_icon=tk.PhotoImage(file='icons2/dark.png')
+red_icon=tk.PhotoImage(file='icons2/red.png')
+monokai_icon=tk.PhotoImage(file='icons2/monokai.png')
+night_blue_icon=tk.PhotoImage(file='icons2/night_blue.png')
+#ADDING COMMAND FOR COLOR THEME MENU
 
 
 color_theme=tk.Menu(main_menu,tearoff=False)
