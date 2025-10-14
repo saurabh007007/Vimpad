@@ -46,12 +46,27 @@ red_icon=tk.PhotoImage(file='icons2/red.png')
 monokai_icon=tk.PhotoImage(file='icons2/monokai.png')
 night_blue_icon=tk.PhotoImage(file='icons2/night_blue.png')
 #ADDING COMMAND FOR COLOR THEME MENU
-
-
 color_theme=tk.Menu(main_menu,tearoff=False)
-view=tk.Menu(main_menu,tearoff=False)
-about=tk.Menu(main_menu,tearoff=False)
+color_theme.add_radiobutton(label='Light Default',image=light_default_icon,compound=tk.LEFT)
+color_theme.add_radiobutton(label='Light Plus',image=light_plus_icon,compound=tk.LEFT)
+color_theme.add_radiobutton(label='Dark',image=dark_icon,compound=tk.LEFT)
+color_theme.add_radiobutton(label='Red',image=red_icon,compound=tk.LEFT)
+color_theme.add_radiobutton(label='Monokai',image=monokai_icon,compound=tk.LEFT)
+color_theme.add_radiobutton(label='Night Blue',image=night_blue_icon,compound=tk.LEFT)
+#view icons
+tool_bar_icon=tk.PhotoImage(file='icons2/tool_bar.png')
+status_bar_icon=tk.PhotoImage(file='icons2/status_bar.png')
+#ADDING COMMAND FOR VIEW MENU
 
+view=tk.Menu(main_menu,tearoff=False)
+view.add_checkbutton(label='Tool Bar',image=tool_bar_icon,compound=tk.LEFT)
+view.add_checkbutton(label='Status Bar',image=status_bar_icon,compound=tk.LEFT)
+
+#icon of the about
+about_icon=tk.PhotoImage(file='icons2/github.png')
+# Command for the about menu 
+about=tk.Menu(main_menu,tearoff=False)
+about.add_command(label='Developed by Saurabh Yadav(saurabh007007)',image=about_icon,compound=tk.LEFT)
 
 #cascade
 
