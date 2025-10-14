@@ -18,10 +18,10 @@ save_icon=tk.PhotoImage(file='icons2/save_as.png')
 exit_icon=tk.PhotoImage(file='icons2/exit.png')
 
 file=tk.Menu(main_menu,tearoff=False)
-file.add_command(label='New',image=new_icon)
-
-
-
+file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
+file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O')
+file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S')
+file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q')
 
 edit=tk.Menu(main_menu,tearoff=False)
 color_theme=tk.Menu(main_menu,tearoff=False)
