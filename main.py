@@ -106,18 +106,50 @@ underline_icon=tk.PhotoImage(file='icons2/underline.png')
 underline_btn=ttk.Button(tool_bar,image=underline_icon)
 underline_btn.grid(row=0,column=4,padx=5)
 
+# font color button
+font_color_icon=tk.PhotoImage(file='icons2/font_color.png')
+font_color_btn=ttk.Button(tool_bar,image=font_color_icon)
+font_color_btn.grid(row=0,column=5,padx=5)
+
+#align left button
+align_left_icon=tk.PhotoImage(file='icons2/align_left.png')
+align_left_btn=ttk.Button(tool_bar,image=align_left_icon)
+align_left_btn.grid(row=0,column=6,padx=5)
+#align center button
+align_center_icon=tk.PhotoImage(file='icons2/align_center.png')
+align_center_btn=ttk.Button(tool_bar,image=align_center_icon)
+align_center_btn.grid(row=0,column=7,padx=5)
+#align right button
+align_right_icon=tk.PhotoImage(file='icons2/align_right.png')
+align_right_btn=ttk.Button(tool_bar,image=align_right_icon)
+align_right_btn.grid(row=0,column=8,padx=5)
 
 
 # ##############Toolbar menu ending ###########
 
 
 ########### Text Editor  menu section##########
+text_editor=tk.Text(main_application)
+text_editor.config(wrap='word',relief=tk.FLAT)
+
+scroll_bar=tk.Scrollbar(main_application)
+text_editor.focus_set()
+scroll_bar.pack(side=tk.RIGHT,fill=tk.Y)
+text_editor.pack(fill=tk.BOTH,expand=True)
+scroll_bar.config(command=text_editor.yview)
+text_editor.config(yscrollcommand=scroll_bar.set)
 
 # ##############Text Editor  menu ending ###########
 
 
 
 ########### Status Bar  menu section##########
+
+status_bar=ttk.Label(main_application,text='Status Bar')
+status_bar.pack(side=tk.BOTTOM)
+
+
+
 
 # ##############Status Bar  menu ending ###########
 
