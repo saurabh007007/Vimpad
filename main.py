@@ -7,7 +7,7 @@ import traceback
 
 main_application = tk.Tk()
 main_application.geometry('1200x800')
-main_application.title('VimPad-A Text Editor for Beginners')
+main_application.title('VimPad - A Text Editor for Beginners by Saurabh Yadav')
 main_icon=tk.PhotoImage(file='icons2/s.png')
 main_application.iconphoto(False,main_icon)
 
@@ -140,6 +140,28 @@ scroll_bar.pack(side=tk.RIGHT,fill=tk.Y)
 text_editor.pack(fill=tk.BOTH,expand=True)
 scroll_bar.config(command=text_editor.yview)
 text_editor.config(yscrollcommand=scroll_bar.set)
+
+# font family config and editor config 
+current_font_family='Arial'
+current_font_size=14
+def change_font(event=None):
+    global current_font_family
+    current_font_family=font_family.get()
+    text_editor.configure(font=(current_font_family,current_font_size))
+    
+def change_font_size(event=None):
+    global current_font_size
+    current_font_size=size_var.get()
+    text_editor.configure(font=(current_font_family,current_font_size))
+    
+     
+text_editor.configure(font=('Arial',14))
+
+# bind commbox
+font_box.bind("<<ComboboxSelected>>", change_font)
+font_box.bind("<<ComboboxSelected>>", change_font_size)
+
+
 
 # ##############Text Editor  menu ending ###########
 
