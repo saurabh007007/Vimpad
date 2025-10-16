@@ -160,8 +160,73 @@ text_editor.configure(font=('Arial',14))
 # bind commbox
 font_box.bind("<<ComboboxSelected>>", change_font)
 font_box.bind("<<ComboboxSelected>>", change_font_size)
+# BUTTONS FUNCTINALITY LIKE ITALIC ETC
+#bold button functionality 
+def chnage_to_bold(event=None):
+    text_property=tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['weight']=='normal':
+        text_editor.config(font=(current_font_family,current_font_size,'bold'))
+    if text_property.actual()['weight']=='bold':
+        text_editor.config(font=(current_font_family,current_font_size,'normal'))
+
+bold_btn.config(command=chnage_to_bold)
+#italic button configuration
+def chnage_to_italic():
+    text_property=tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['slant']=='roman':
+        text_editor.config(font=(current_font_family,current_font_size,'italic'))
+    if text_property.actual()['slant']=='italic':
+        text_editor.config(font=(current_font_family,current_font_size,'roman'))
+italic_btn.config(command=chnage_to_italic)
+
+# underline functionality configuration
+
+def change_to_underline():
+    text_property=tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['underline']==0:
+        text_editor.config(font=(current_font_family,current_font_size,'underline'))
+    if text_property.actual()['underline']==1:
+        text_editor.config(font=(current_font_family,current_font_size,'normal'))
+
+underline_btn.config(command=change_to_underline)
+
+# font color functionality 
+
+def chnage_font_color():
+    color_var=tk.colorchooser.askcolor()
+    # print(color_var)
+    text_editor.configure(fg=color_var[1])
+
+font_color_btn.configure(command=chnage_font_color)
+
+# Align ments functionality 
+
+# ALIGN LEFT 
+def align_left():
+    text_content=text_editor.get(1.0,'end')
+    text_editor.tag_config('left',justify=tk.LEFT)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'left')
+
+align_left_btn.configure(command=align_left)
+# align right ]
+def align_right():
+    text_content=text_editor.get(1.0,'end')
+    text_editor.tag_config('right',justify=tk.RIGHT)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'right')
+
+align_right_btn.configure(command=align_right)
 
 
+# align center 
+def align_center():
+    text_content=text_editor.get(1.0,'end')
+    text_editor.tag_config('center',justify=tk.CENTER)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'center')
+
+align_center_btn.configure(command=align_center)
 
 # ##############Text Editor  menu ending ###########
 
@@ -172,13 +237,25 @@ font_box.bind("<<ComboboxSelected>>", change_font_size)
 status_bar=ttk.Label(main_application,text='Status Bar')
 status_bar.pack(side=tk.BOTTOM)
 
+text_change=False
+def change_status_bar(even=None):
+    global text_change
+    if text_editor.edit_modified():
+        text_change=True
+        words=len(text_editor.get(1.0,'end-1c').split())
+        charcters=len(text_editor.get(1.0,'end-1c'))
+        status_bar.config(text=f'Words:{words} Characters:{charcters}')
+    text_editor.edit_modified(False)
 
+text_editor.bind('<<Modified>>',change_status_bar)
 
 
 # ##############Status Bar  menu ending ###########
 
 
 ########### Main menu Functionality##########
+url =''
+
 
 # file commands
 file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
