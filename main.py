@@ -483,6 +483,8 @@ main_application.bind("<Control o>",open_file)
 main_application.bind("<Control s>",save_file)
 main_application.bind("<Control Alt s>",save_as_file)
 main_application.bind("<Control q>",exit_func)
+main_application.bind("<Control f>",find_func)
+
 
 
 main_application.mainloop()
