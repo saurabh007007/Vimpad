@@ -366,7 +366,12 @@ def find_func(event=None):
         
     # replace fundtion 
     def replace():
-        pass 
+        word=find_input.get()
+        replace_text=replace_input.get()
+        content=text_editor.get(1.0,tk.END)
+        new_content=content.replace(word,replace_text)
+        text_editor.delete(1.0,tk.END)
+        text_editor.insert(1.0,new_content)
     
     find_dialog=tk.Toplevel()
     find_dialog.geometry('450x250+500+200')
