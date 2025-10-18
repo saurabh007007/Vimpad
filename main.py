@@ -477,4 +477,12 @@ for i in color_dict:
 
 main_application.configure(menu=main_menu)
 
+#binding shortcut keys
+main_application.bind("<Control n>",new_file)
+main_application.bind("<Control o>",open_file)
+main_application.bind("<Control s>",save_file)
+main_application.bind("<Control Alt s>",save_as_file)
+main_application.bind("<Control q>",exit_func)
+
+
 main_application.mainloop()
