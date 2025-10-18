@@ -415,8 +415,31 @@ edit.add_command(label='Clear All',image=clear_all_icon,compound=tk.LEFT,acceler
 edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F',command=find_func)
 
 # view check buttons /commands
-view.add_checkbutton(label='Tool Bar',image=tool_bar_icon,compound=tk.LEFT)
-view.add_checkbutton(label='Status Bar',image=status_bar_icon,compound=tk.LEFT)
+show_statusbar=tk.BooleanVar()
+show_toolbar=tk.BooleanVar()
+show_statusbar.set(True)
+show_toolbar.set(True)
+
+def hide_toolbar(event=None):
+    global show_toolbar
+    if show_toolbar:
+        tool_bar.pack_forget()
+        show_toolbar=False
+    else:
+        text_editor.pack_forget()
+        status_bar.pack_forget()
+        tool_bar.pack(side=tk.TOP,fill=tk.X)
+        text_editor.pack(fill=tk.BOTH,expand=True)
+        status_bar.pack(side=tk.BOTTOM,fill=tk.X)
+        show_toolbar=True
+        
+
+def hide_statusbar(event=None):
+    global show_statusbar
+    
+
+view.add_checkbutton(label='Tool Bar',onvalue=True,offvalue=0,variable=show_toolbar,image=tool_bar_icon,compound=tk.LEFT,command=hide_toolbar)
+view.add_checkbutton(label='Status Bar',onvalue=1,offvalue=False,variable=show_statusbar,image=status_bar_icon,compound=tk.LEFT,command=hide_statusbar)
 
 # color theme radio buttons/commands
 count =0
