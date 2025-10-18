@@ -344,13 +344,70 @@ def exit_func(event=None):
         return
 
 file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q',command=exit_func)
+# find functionality 
+def find_func(event=None):
+    #find function 
+    def find():
+        word=find_input.get().replace(' ','')
+        text_editor.tag_remove('match','1.0',tk.END)
+        matches=0
+        if word:
+            start_pos='1.0'
+            while True:
+                start_pos=text_editor.search(word,start_pos,stopindex=tk.END)
+                if not start_pos:
+                    break
+                end_pos=f'{start_pos}+{len(word)}c'
+                text_editor.tag_add('match',start_pos,end_pos)
+                matches+=1
+                start_pos=end_pos
+                text_editor.tag_config('match',foreground='red',background='yellow')
+                
+        
+    # replace fundtion 
+    def replace():
+        pass 
+    
+    find_dialog=tk.Toplevel()
+    find_dialog.geometry('450x250+500+200')
+    find_dialog.title('Find')
+    find_dialog.resizable(0,0)
+    
+    #frame 
+    find_frame=ttk.Labelframe(find_dialog,text='Find/Replace')
+    find_frame.pack(pady=20)
+    
+    #label 
+    text_find_level=ttk.Label(find_frame,text='Find: ')
+    text_replace_label=ttk.Label(find_frame,text='Replace')
+    #entry boxes
+    find_input=ttk.Entry(find_frame,width=30)
+    replace_input=ttk.Entry(find_frame,width=30)
+    
+    #button 
+    find_button=ttk.Button(find_frame,text='Find',command=find)
+    replace_button=ttk.Button(find_frame,text='Replace',command=replace)
+    
+    #lable grid 
+    text_find_level.grid(row=0,column=0,padx=4,pady=4)
+    text_replace_label.grid(row=2,column=1,padx=4,pady=4)
+    #grid entry boxes
+    find_input.grid(row=0,column=1,padx=4,pady=4)
+    
+    #replace input grid 
+    replace_input.grid(row=1,column=1,padx=4,pady=4)
+    
+    #grid button find
+    find_button.grid(row=2,column=0,padx=4,pady=4)
+    replace_button.grid(row=2,column=1,padx=4,pady=4)
+    find_dialog.mainloop()
 
 # edit commands 
 edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C',command=lambda:text_editor.event_generate("<Control c>"))
 edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V',command=lambda:text_editor.event_generate("<Control v>"))
 edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X',command=lambda:text_editor.event_generate("<Control x>"))
 edit.add_command(label='Clear All',image=clear_all_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+X',command=lambda:text_editor.delete(1.0,tk.END))
-edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F')
+edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F',command=find_func)
 
 # view check buttons /commands
 view.add_checkbutton(label='Tool Bar',image=tool_bar_icon,compound=tk.LEFT)
