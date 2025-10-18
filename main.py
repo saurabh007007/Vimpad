@@ -430,21 +430,41 @@ def hide_toolbar(event=None):
         status_bar.pack_forget()
         tool_bar.pack(side=tk.TOP,fill=tk.X)
         text_editor.pack(fill=tk.BOTH,expand=True)
-        status_bar.pack(side=tk.BOTTOM,fill=tk.X)
+        status_bar.pack(side=tk.BOTTOM)
         show_toolbar=True
         
 
 def hide_statusbar(event=None):
     global show_statusbar
+    if show_statusbar:
+        status_bar.pack_forget()
+        show_statusbar=False
+    else:
+        status_bar.pack(side=tk.BOTTOM)
+        show_statusbar=True
+    
     
 
 view.add_checkbutton(label='Tool Bar',onvalue=True,offvalue=0,variable=show_toolbar,image=tool_bar_icon,compound=tk.LEFT,command=hide_toolbar)
 view.add_checkbutton(label='Status Bar',onvalue=1,offvalue=False,variable=show_statusbar,image=status_bar_icon,compound=tk.LEFT,command=hide_statusbar)
 
 # color theme radio buttons/commands
+# chnage theme 
+def change_theme(event=None):
+    
+    chooseen_theme=theme_choice.get()
+    color_tuple=color_dict.get(chooseen_theme)
+    # print(color_tuple)
+    fg_color,bg_color=color_tuple[0],color_tuple[1]
+    text_editor.config(background=bg_color,fg=fg_color)
+    
+    
+    
+
+
 count =0
 for i in color_dict:
-    color_theme.add_radiobutton(label=i,image=color_icons[count],variable=theme_choice,compound=tk.LEFT)
+    color_theme.add_radiobutton(label=i,image=color_icons[count],variable=theme_choice,compound=tk.LEFT,command=change_theme)
     count+=1
 
 
