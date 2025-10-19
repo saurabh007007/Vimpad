@@ -171,7 +171,7 @@ def chnage_to_bold(event=None):
 
 bold_btn.config(command=chnage_to_bold)
 #italic button configuration
-def chnage_to_italic():
+def chnage_to_italic(event=None):
     text_property=tk.font.Font(font=text_editor['font'])
     if text_property.actual()['slant']=='roman':
         text_editor.config(font=(current_font_family,current_font_size,'italic'))
