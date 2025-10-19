@@ -159,7 +159,7 @@ text_editor.configure(font=('Arial',14))
 
 # bind commbox
 font_box.bind("<<ComboboxSelected>>", change_font)
-font_box.bind("<<ComboboxSelected>>", change_font_size)
+font_size.bind("<<ComboboxSelected>>", change_font_size)
 # BUTTONS FUNCTINALITY LIKE ITALIC ETC
 #bold button functionality 
 def chnage_to_bold(event=None):
@@ -181,7 +181,7 @@ italic_btn.config(command=chnage_to_italic)
 
 # underline functionality configuration
 
-def change_to_underline():
+def change_to_underline(event=None):
     text_property=tk.font.Font(font=text_editor['font'])
     if text_property.actual()['underline']==0:
         text_editor.config(font=(current_font_family,current_font_size,'underline'))
