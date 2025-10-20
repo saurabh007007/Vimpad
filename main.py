@@ -9,7 +9,8 @@ main_application = tk.Tk()
 main_application.geometry('1200x800')
 main_application.title('VimPad - A Text Editor for Beginners by Saurabh Yadav')
 main_icon=tk.PhotoImage(file='icons2/s.png')
-main_application.iconphoto(False,main_icon)
+# main_application.iconphoto(main_icon)
+main_application.wm_iconbitmap(main_icon)
 
 ########### main menu section##########
 main_menu = tk.Menu()
