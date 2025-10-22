@@ -1,24 +1,10 @@
-from setuptools import setup
+import PyInstaller.__main__
 
-APP = ['main.py']
-DATA_FILES = ['icons2']  # include your icons folder
-OPTIONS = {
-    'argv_emulation': True,
-    'iconfile': 'icons2/s.icns',  # macOS app icon (must be .icns)
-    'packages': ['tkinter'],
-    'resources': ['icons2'],
-    'plist': {
-        'CFBundleName': 'VimPad',
-        'CFBundleDisplayName': 'VimPad',
-        'CFBundleIdentifier': 'com.saurabh.vimpad',
-        'CFBundleVersion': '1.0',
-        'CFBundleShortVersionString': '1.0',
-    },
-}
-
-setup(
-    app=APP,
-    data_files=DATA_FILES,
-    options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
-)
+PyInstaller.__main__.run([
+    'main.py',                   # your main file
+    '--name=VimPad',             # name of the app/executable
+    '--windowed',                # GUI app, no console
+    '--onefile',                 # bundle into a single executable
+    '--add-data=icons2:icons2',
+    '--icon=s.ico'
+])
