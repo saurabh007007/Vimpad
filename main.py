@@ -86,7 +86,11 @@ fonts_tuples=tk.font.families()
 font_family=tk.StringVar()
 font_box=ttk.Combobox(tool_bar,width=20,textvariable=font_family,state='readonly')
 font_box['values']=fonts_tuples
-font_box.current(fonts_tuples.index('Arial'))
+# Set to Arial if available, otherwise use first font
+try:
+    font_box.current(fonts_tuples.index('Arial'))
+except ValueError:
+    font_box.current(0)
 font_box.grid(row=0,column=0,padx=5)
 
 #size box -toolbar 
@@ -465,11 +469,8 @@ def change_theme(event=None):
     
 
 
-count =0
-for i in color_dict:
-    color_theme.add_radiobutton(label=i,image=color_icons[count],variable=theme_choice,compound=tk.LEFT,command=change_theme)
-    count+=1
-
+for count, theme_name in enumerate(color_dict):
+    color_theme.add_radiobutton(label=theme_name,image=color_icons[count],variable=theme_choice,compound=tk.LEFT,command=change_theme)
 
 
 # ############## Main  menu Functionality ending ###########
