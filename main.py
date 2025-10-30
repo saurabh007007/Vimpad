@@ -204,28 +204,22 @@ font_color_btn.configure(command=chnage_font_color)
 
 # ALIGN LEFT 
 def align_left():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('left',justify=tk.LEFT)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'left')
+    text_editor.tag_add('left', 1.0, 'end')
 
 align_left_btn.configure(command=align_left)
 # align right ]
 def align_right():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('right',justify=tk.RIGHT)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'right')
+    text_editor.tag_add('right', 1.0, 'end')
 
 align_right_btn.configure(command=align_right)
 
 
 # align center 
 def align_center():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('center',justify=tk.CENTER)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'center')
+    text_editor.tag_add('center', 1.0, 'end')
 
 align_center_btn.configure(command=align_center)
 
@@ -243,8 +237,9 @@ def change_status_bar(even=None):
     global text_change
     if text_editor.edit_modified():
         text_change=True
-        words=len(text_editor.get(1.0,'end-1c').split())
-        charcters=len(text_editor.get(1.0,'end-1c'))
+        content=text_editor.get(1.0,'end-1c')
+        words=len(content.split())
+        charcters=len(content)
         status_bar.config(text=f'Words:{words} Characters:{charcters}')
     text_editor.edit_modified(False)
 
@@ -349,7 +344,7 @@ file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl
 def find_func(event=None):
     #find function 
     def find():
-        word=find_input.get().replace(' ','')
+        word=find_input.get()
         text_editor.tag_remove('match','1.0',tk.END)
         matches=0
         if word:
@@ -369,10 +364,17 @@ def find_func(event=None):
     def replace():
         word=find_input.get()
         replace_text=replace_input.get()
-        content=text_editor.get(1.0,tk.END)
-        new_content=content.replace(word,replace_text)
-        text_editor.delete(1.0,tk.END)
-        text_editor.insert(1.0,new_content)
+        if word:
+            # Use search and replace instead of getting/deleting/inserting all text
+            start_pos='1.0'
+            while True:
+                start_pos=text_editor.search(word,start_pos,stopindex=tk.END)
+                if not start_pos:
+                    break
+                end_pos=f'{start_pos}+{len(word)}c'
+                text_editor.delete(start_pos,end_pos)
+                text_editor.insert(start_pos,replace_text)
+                start_pos=f'{start_pos}+{len(replace_text)}c'
     
     find_dialog=tk.Toplevel()
     find_dialog.geometry('450x250+500+200')
