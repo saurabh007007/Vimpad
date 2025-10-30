@@ -86,7 +86,11 @@ fonts_tuples=tk.font.families()
 font_family=tk.StringVar()
 font_box=ttk.Combobox(tool_bar,width=20,textvariable=font_family,state='readonly')
 font_box['values']=fonts_tuples
-font_box.current(fonts_tuples.index('Arial'))
+# Set to Arial if available, otherwise use first font
+try:
+    font_box.current(fonts_tuples.index('Arial'))
+except ValueError:
+    font_box.current(0)
 font_box.grid(row=0,column=0,padx=5)
 
 #size box -toolbar 
@@ -167,7 +171,7 @@ def chnage_to_bold(event=None):
     text_property=tk.font.Font(font=text_editor['font'])
     if text_property.actual()['weight']=='normal':
         text_editor.config(font=(current_font_family,current_font_size,'bold'))
-    if text_property.actual()['weight']=='bold':
+    else:
         text_editor.config(font=(current_font_family,current_font_size,'normal'))
 
 bold_btn.config(command=chnage_to_bold)
@@ -176,7 +180,7 @@ def chnage_to_italic(event=None):
     text_property=tk.font.Font(font=text_editor['font'])
     if text_property.actual()['slant']=='roman':
         text_editor.config(font=(current_font_family,current_font_size,'italic'))
-    if text_property.actual()['slant']=='italic':
+    else:
         text_editor.config(font=(current_font_family,current_font_size,'roman'))
 italic_btn.config(command=chnage_to_italic)
 
@@ -186,7 +190,7 @@ def change_to_underline(event=None):
     text_property=tk.font.Font(font=text_editor['font'])
     if text_property.actual()['underline']==0:
         text_editor.config(font=(current_font_family,current_font_size,'underline'))
-    if text_property.actual()['underline']==1:
+    else:
         text_editor.config(font=(current_font_family,current_font_size,'normal'))
 
 underline_btn.config(command=change_to_underline)
@@ -204,28 +208,22 @@ font_color_btn.configure(command=chnage_font_color)
 
 # ALIGN LEFT 
 def align_left():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('left',justify=tk.LEFT)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'left')
+    text_editor.tag_add('left', 1.0, 'end')
 
 align_left_btn.configure(command=align_left)
 # align right ]
 def align_right():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('right',justify=tk.RIGHT)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'right')
+    text_editor.tag_add('right', 1.0, 'end')
 
 align_right_btn.configure(command=align_right)
 
 
 # align center 
 def align_center():
-    text_content=text_editor.get(1.0,'end')
     text_editor.tag_config('center',justify=tk.CENTER)
-    text_editor.delete(1.0,'end')
-    text_editor.insert(tk.INSERT,text_content,'center')
+    text_editor.tag_add('center', 1.0, 'end')
 
 align_center_btn.configure(command=align_center)
 
@@ -243,8 +241,9 @@ def change_status_bar(even=None):
     global text_change
     if text_editor.edit_modified():
         text_change=True
-        words=len(text_editor.get(1.0,'end-1c').split())
-        charcters=len(text_editor.get(1.0,'end-1c'))
+        content=text_editor.get(1.0,'end-1c')
+        words=len(content.split())
+        charcters=len(content)
         status_bar.config(text=f'Words:{words} Characters:{charcters}')
     text_editor.edit_modified(False)
 
@@ -349,7 +348,7 @@ file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl
 def find_func(event=None):
     #find function 
     def find():
-        word=find_input.get().replace(' ','')
+        word=find_input.get()
         text_editor.tag_remove('match','1.0',tk.END)
         matches=0
         if word:
@@ -369,10 +368,17 @@ def find_func(event=None):
     def replace():
         word=find_input.get()
         replace_text=replace_input.get()
-        content=text_editor.get(1.0,tk.END)
-        new_content=content.replace(word,replace_text)
-        text_editor.delete(1.0,tk.END)
-        text_editor.insert(1.0,new_content)
+        if word:
+            # Use search and replace instead of getting/deleting/inserting all text
+            start_pos='1.0'
+            while True:
+                start_pos=text_editor.search(word,start_pos,stopindex=tk.END)
+                if not start_pos:
+                    break
+                end_pos=f'{start_pos}+{len(word)}c'
+                text_editor.delete(start_pos,end_pos)
+                text_editor.insert(start_pos,replace_text)
+                start_pos=f'{start_pos}+{len(replace_text)}c'
     
     find_dialog=tk.Toplevel()
     find_dialog.geometry('450x250+500+200')
@@ -422,27 +428,25 @@ show_statusbar.set(True)
 show_toolbar.set(True)
 
 def hide_toolbar(event=None):
-    global show_toolbar
-    if show_toolbar:
+    if show_toolbar.get():
         tool_bar.pack_forget()
-        show_toolbar=False
+        show_toolbar.set(False)
     else:
         text_editor.pack_forget()
         status_bar.pack_forget()
         tool_bar.pack(side=tk.TOP,fill=tk.X)
         text_editor.pack(fill=tk.BOTH,expand=True)
         status_bar.pack(side=tk.BOTTOM)
-        show_toolbar=True
+        show_toolbar.set(True)
         
 
 def hide_statusbar(event=None):
-    global show_statusbar
-    if show_statusbar:
+    if show_statusbar.get():
         status_bar.pack_forget()
-        show_statusbar=False
+        show_statusbar.set(False)
     else:
         status_bar.pack(side=tk.BOTTOM)
-        show_statusbar=True
+        show_statusbar.set(True)
     
     
 
@@ -463,11 +467,8 @@ def change_theme(event=None):
     
 
 
-count =0
-for i in color_dict:
-    color_theme.add_radiobutton(label=i,image=color_icons[count],variable=theme_choice,compound=tk.LEFT,command=change_theme)
-    count+=1
-
+for count, theme_name in enumerate(color_dict):
+    color_theme.add_radiobutton(label=theme_name,image=color_icons[count],variable=theme_choice,compound=tk.LEFT,command=change_theme)
 
 
 # ############## Main  menu Functionality ending ###########
